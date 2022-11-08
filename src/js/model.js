@@ -1,6 +1,4 @@
-import { async } from 'regenerator-runtime';
 import { API_URL, RES_PER_PAGE, KEY } from './config.js';
-// import { getJSON, sendJSON } from './helpers.js';
 import { AJAX } from './helpers.js';
 
 export const state = {
@@ -41,7 +39,7 @@ export const loadRecipe = async function (id) {
     console.log(state.recipe);
   } catch (err) {
     // Temp error handling
-    console.log(`${err}****`);
+    console.error(`${err} 💥💥💥💥`);
     throw err;
   }
 };
@@ -64,7 +62,7 @@ export const loadSearchResults = async function (query) {
     });
     state.search.page = 1;
   } catch (err) {
-    console.log(`${err}****`);
+    console.error(`${err} 💥💥💥💥`);
     throw err;
   }
 };
@@ -81,7 +79,6 @@ export const getSearchResultsPage = function (page = state.search.page) {
 export const updateServings = function (newServings) {
   state.recipe.ingredients.forEach(ing => {
     ing.quantity = (ing.quantity * newServings) / state.recipe.servings;
-    // newQt = oldQt * new servings / oldServings // 2 * 8 / 4 = 4
   });
 
   state.recipe.servings = newServings;
@@ -95,7 +92,7 @@ export const addBookmark = function (recipe) {
   // Add bookmark
   state.bookmarks.push(recipe);
 
-  // Mark current recipe as bookmark
+  // Mark current recipe as bookmarked
   if (recipe.id === state.recipe.id) state.recipe.bookmarked = true;
 
   persistBookmarks();
@@ -117,23 +114,20 @@ const init = function () {
   if (storage) state.bookmarks = JSON.parse(storage);
 };
 init();
-// console.log(state.bookmarks);
+
 const clearBookmarks = function () {
   localStorage.clear('bookmarks');
 };
-// clearBookmarks();
 
 export const uploadRecipe = async function (newRecipe) {
   try {
-    // console.log(Object.entries(newRecipe))
     const ingredients = Object.entries(newRecipe)
       .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
       .map(ing => {
         const ingArr = ing[1].split(',').map(el => el.trim());
-        // const ingArr = ing[1].replaceAll(' ', '').split(',');
         if (ingArr.length !== 3)
           throw new Error(
-            'Wrong ingredient format! Please use the correct format :)'
+            'Wrong ingredient fromat! Please use the correct format :)'
           );
 
         const [quantity, unit, description] = ingArr;
@@ -151,10 +145,7 @@ export const uploadRecipe = async function (newRecipe) {
       ingredients,
     };
 
-    // console.log(ingredients);
-    // console.log(recipe);
     const data = await AJAX(`${API_URL}?key=${KEY}`, recipe);
-    // console.log(data)
     state.recipe = createRecipeObject(data);
     addBookmark(state.recipe);
   } catch (err) {

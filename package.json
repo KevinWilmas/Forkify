@@ -14,12 +14,10 @@
   "author": "Kevin Wilmas",
   "license": "ISC",
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.7.0",
-    "parcel": "^2.7.0"
+    "@parcel/transformer-sass": "^2.2.1",
+    "parcel": "^2.2.1"
   },
   "dependencies": {
-    "core-js": "^3.24.1",
-    "fractional": "^1.0.0",
-    "regenerator-runtime": "^0.13.9"
+    "fracty": "^1.0.9"
   }
 }
